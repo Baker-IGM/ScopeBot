@@ -2,15 +2,16 @@
   "name": "scope-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Baker-IGM/ScopeBot.git"
   },
-  "author": "",
+  "author": "Eric Baker",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Baker-IGM/ScopeBot/issues"
