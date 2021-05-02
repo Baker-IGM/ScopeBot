@@ -46,7 +46,7 @@ function getQuote(usr) {
 }
 
 // Listens to incoming messages that contain "hello"
-app.message('${keywords}', async ({
+app.message(keywords, async ({
   message,
   say
 }) => {
