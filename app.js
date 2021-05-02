@@ -10,6 +10,8 @@ const fs = require('fs');
 
 let rawdata;
 
+let keywords;
+
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.BOT_TOKEN,
@@ -27,36 +29,64 @@ const app = new App({
   fs.readFile('data.json', (err, data) => {
     if (err) throw err;
     rawdata = JSON.parse(data);
-    console.log(JSON.stringify(rawdata));
+
+    keywords = new RegExp(rawdata.keywords.join("|"), 'gi');
+    console.log(keywords);
   });
 })();
 
-function getQuote(usr)
-{
+//  Get a random quote for the user
+function getQuote(usr) {
   let quote = rawdata.scopebook[Math.floor(Math.random() * rawdata.scopebook.length)];
-  console.log(quote);
+
   //  Add user's name to quote
   quote = quote.replace("$", "<@" + usr + ">");
 
   return quote;
 }
 
+function containsKeyword(msg) {
+  if (rawdata.keywords.some(e => e == msg.toLowerCase())) {
+    return true;
+  }
+
+  return false;
+}
+
+// Listens to incoming messages that contain "hello"
+app.message(keywords, async ({ message, say }) => {
+  // say() sends a message to the channel where the event was triggered
+  await say({
+    "blocks": [{
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": getQuote(message.user)
+      }
+    }]
+  });
+});
+
 
 // subscribe to 'app_mention' event in your App config
 // need app_mentions:read and chat:write scopes
-app.event('app_mention', async ({ event, context, client, say }) => {
+app.event('app_mention', async ({
+  event,
+  context,
+  client,
+  say
+}) => {
   try {
-    await say({"blocks": [
-      {
+    await say({
+      "blocks": [{
         "type": "section",
         "text": {
           "type": "mrkdwn",
           "text": getQuote(event.user)
         }
-      }
-    ]});
-  }
-  catch (error) {
+      }]
+    });
+  } catch (error) {
     console.error(error);
   }
 });
