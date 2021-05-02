@@ -30,7 +30,7 @@ const app = new App({
     if (err) throw err;
     rawdata = JSON.parse(data);
 
-    keywords = new RegExp(rawdata.keywords.join("|"), 'gi');
+    keywords = new RegExp(rawdata.keywords.join("|"));
     console.log(keywords);
   });
 })();
@@ -54,7 +54,7 @@ function containsKeyword(msg) {
 }
 
 // Listens to incoming messages that contain "hello"
-app.message(keywords, async ({ message, say }) => {
+app.message(/^(keywords).*/, async ({ message, say }) => {
   // say() sends a message to the channel where the event was triggered
   await say({
     "blocks": [{
