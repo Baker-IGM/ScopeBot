@@ -56,7 +56,7 @@ app.message(/feature|it would be cool if|idea|let's make|let's add|what if|proje
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "Out of scope"
+        "text": getQuote(message.user)
       }
     }]
   });
