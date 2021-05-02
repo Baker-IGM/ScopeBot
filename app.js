@@ -27,6 +27,36 @@ const app = new App({
   fs.readFile('data.json', (err, data) => {
     if (err) throw err;
     rawdata = JSON.parse(data);
-    console.log(rawdata);
+    console.log(JSON.stringify(rawdata));
   });
 })();
+
+function getQuote(usr)
+{
+  let quote = rawdata.scopebook[Math.floor(Math.random() * rawdata.scopebook.length)];
+  console.log(quote);
+  //  Add user's name to quote
+  quote = quote.replace("$", "<@" + usr + ">");
+
+  return quote;
+}
+
+
+// subscribe to 'app_mention' event in your App config
+// need app_mentions:read and chat:write scopes
+app.event('app_mention', async ({ event, context, client, say }) => {
+  try {
+    await say({"blocks": [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": getQuote(event.user)
+        }
+      }
+    ]});
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
