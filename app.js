@@ -56,7 +56,7 @@ app.message(keywords, async ({
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": getQuote(message.user)
+        "text": "Out of scope"
       }
     }]
   });
