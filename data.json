@@ -1,6 +1,5 @@
-
-# Trigger words or phrases
-keywords = [
+{
+  "keywords": [
     "feature",
     "it would be cool if",
     "idea",
@@ -12,10 +11,8 @@ keywords = [
     "i was thinking",
     "talking about",
     "new"
-]
-
-# Possible phrases the bot can say about scope
-scopebook = [
+  ],
+  "scopebook": [
     "**- SCOPE -**",
     "*But have you considered... scope?*",
     "I like your idea, but, it's a little outside the scope 乁| ･ 〰 ･ |ㄏ",
@@ -59,10 +56,7 @@ scopebook = [
     "\"The trouble is, I have no idea how to answer this question.  I'm not really afraid of genetic technology, atomic weapons or killer robots.  I'm afraid of inflated scope.\" - !Ken Levine",
     "\"I **had** to kill somebody in the intro.  It's a basic part of managing scope.\" - !Frank Mentzer",
     "\"This game requires exactly 18 lines of text.  I don't think I've ever agonised over scope so much before.\" - !Terry Cavanagh"
-]
-
-# channel cooldowns
-cooldowns = {}
-
-# per user scope counter
-scopecounter = {}
+  ],
+  "cooldowns": {},
+  "scopecounter": {}
+}
