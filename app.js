@@ -122,7 +122,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "- " + rawdata.keywords.join("\n- ");
+              "text": "- " + rawdata.keywords.join("\n- ")
             }
           },
           {
@@ -139,7 +139,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "- " + rawdata.scopebook.join("\n- ");
+              "text": "- " + rawdata.scopebook.join("\n- ")
             }
           }
         ]
