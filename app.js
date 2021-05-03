@@ -47,12 +47,12 @@ function getQuote(usr) {
 function getKeywords() {
   keywords = {};
 
-  for (k in rawdata.keywords) {
+  for (i in rawdata.keywords) {
     keywords += {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "- " + k
+        "text": "- " + rawdata.keywords[i]
       }
     }
   }
@@ -63,12 +63,12 @@ function getKeywords() {
 function getQuotes() {
   quotes = {};
 
-  for (q in rawdata.scopebook) {
+  for (i in rawdata.scopebook) {
     quotes += {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "- " + q
+        "text": "- " + rawdata.scopebook[i]
       }
     }
   }
