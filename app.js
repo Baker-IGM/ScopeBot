@@ -43,10 +43,6 @@ async function checkKeywords(message) {
       return JSON.parse(data);
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     console.log(response.stringify());
   } catch (e) {
     console.log(e);
