@@ -78,6 +78,7 @@ app.message(async ({
   say
 }) => {
   try {
+    fetch
     fs.readFile('data.json', (err, data) => {
       if (err) throw err;
       rawdata = JSON.parse(data);
@@ -86,7 +87,7 @@ app.message(async ({
 
       if (message.text.test(keywordsRegExp)) {
         // say() sends a message to the channel where the event was triggered
-        await say({
+        const result = await say({
           "blocks": [{
             "type": "section",
             "text": {
