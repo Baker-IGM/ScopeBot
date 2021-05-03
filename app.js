@@ -101,7 +101,6 @@ app.event('app_home_opened', async ({
 }) => {
   try {
     const keywords = "- " + rawdata.keywords.join("\n- ");
-    console.log(keywords);
     const quotes = "- " + rawdata.scopebook.join("\n- ");
 
     // Call views.publish with the built-in client
@@ -134,7 +133,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": keywords
+              "text": "- " + keywords + "-"
             }
           },
           {
