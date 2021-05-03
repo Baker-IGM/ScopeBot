@@ -123,7 +123,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "- feature\n- it would be cool if"
+              "text": "- " + rawdata.keywords.join("\n- ")
             }
           },
           {
@@ -140,7 +140,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "- "
+              "text": "- " + rawdata.scopebook.join("\n- ")
             }
           }
         ]
