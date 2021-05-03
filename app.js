@@ -10,7 +10,7 @@ const fs = require('fs');
 
 let rawdata;
 
-let keywords;
+let keywordsRegExp;
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
@@ -30,7 +30,7 @@ const app = new App({
     if (err) throw err;
     rawdata = JSON.parse(data);
 
-    keywords = new RegExp(rawdata.keywords.join("|"), 'gim');
+    keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
   });
 })();
 
@@ -72,6 +72,7 @@ function getQuotes() {
       }
     }
   }
+  console.log(JSON.stringify(quotes));
   return quotes;
 }
 
@@ -159,7 +160,10 @@ app.event('app_home_opened', async ({
               "text": "*Quotes:* \nThese are the out of scope error messasges."
             }
           },
-          getQuotes()
+          getQuotes(),
+          {
+            "type": "divider"
+          }
         ]
       }
     });
