@@ -43,7 +43,7 @@ async function checkKeywords(message) {
       return JSON.parse(data);
     });
 
-    console.log(response.stringify());
+    console.log(response);
   } catch (e) {
     console.log(e);
   }
