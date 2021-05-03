@@ -24,38 +24,6 @@ const app = new App({
   await app.start(process.env.PORT || 3000);
 
   console.log('⚡️ Bolt app is running!');
-
-  fs.readFile('appHome.json', (err, data) => {
-    if (err) throw err;
-    homeView = JSON.parse(data);
-
-    //  Add keywords
-    for (var i = 0; i < rawdata.keywords.length; i++) {
-      homeView.blocks.splice(3, 0, {
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": "- " + rawdata.keywords[i]
-        }
-      });
-    }
-
-    //  Add quotes
-    for (var i = 0; i < rawdata.scopebook.length; i++) {
-      var quote = rawdata.scopebook[i];
-
-      //  Add user's name to quote
-      quote = quote.replace("$", "<@username>");
-
-      homeView.blocks.push({
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": "- " + quote
-        }
-      });
-    }
-  });
 })();
 
 //  Get a random quote for the user
