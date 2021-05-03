@@ -43,10 +43,7 @@ async function checkKeywords(message, keywords) {
   try {
     const keywordsRegExp = new RegExp(keywords.join("|"), 'gim');
 
-    const result = keywordsRegExp.test(message);
-    console.log("was a key found: " + result);
-
-    return result;
+    return await keywordsRegExp.test(message);
   } catch (e) {
     console.log(e);
   }
@@ -71,10 +68,8 @@ app.message(async ({
 }) => {
   try {
     const data = await loadData();
-    console.log(data);
 
     const result = await checkKeywords(message.text, data.keywords);
-    console.log("should send message: " + result);
 
     if (result) {
       // say() sends a message to the channel where the event was triggered
