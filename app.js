@@ -45,7 +45,20 @@ function getQuote(usr) {
 }
 
 function getKeywords() {
-  return "- " + rawdata.keywords.join("\n- ");
+  keywords = {};
+
+  for (k in rawdata.keywords) {
+    keywords += {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "- " + k
+      }
+    }
+  }
+
+  console.log(keywords);
+  return keywords;
 }
 
 function getQuotes() {
@@ -100,7 +113,6 @@ app.event('app_home_opened', async ({
   client
 }) => {
   try {
-    const keywords = new String("- " + rawdata.keywords.join("\n- "));
     const quotes = new String("- " + rawdata.scopebook.join("- "));
 
     // Call views.publish with the built-in client
@@ -110,8 +122,7 @@ app.event('app_home_opened', async ({
       view: {
         // Home tabs must be enabled in your app configuration page under "App Home"
         "type": "home",
-        "blocks": [
-          {
+        "blocks": [{
             "type": "header",
             "text": {
               "type": "plain_text",
@@ -129,13 +140,7 @@ app.event('app_home_opened', async ({
               "text": "*Keywords:* \nThese are the phases that can trigger an out of scope error."
             }
           },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": keywords
-            }
-          },
+          getKeywords(),
           {
             "type": "divider"
           },
