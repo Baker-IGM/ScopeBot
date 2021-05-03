@@ -45,6 +45,14 @@ function getQuote(usr) {
   return quote;
 }
 
+function getKeywords() {
+  return "- " + rawdata.keywords.join("\n- ");
+}
+
+function getQuotes() {
+  return "- " + rawdata.scopebook.join("\n- ");
+}
+
 // Listens to incoming messages that contain "hello"
 app.message(/feature|it would be cool if|idea|let's make|let's add|what if|project|i had a thought|i was thinking|talking about|new/gim, async ({
   message,
@@ -123,7 +131,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "- " + rawdata.keywords.join("\n- ")
+              "text": getKeywords()
             }
           },
           {
@@ -140,14 +148,12 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "- " + rawdata.scopebook.join("\n- ")
+              "text": getQuotes()
             }
           }
         ]
       }
     });
-
-    console.log(result);
   } catch (error) {
     console.error(error);
   }
