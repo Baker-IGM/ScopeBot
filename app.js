@@ -50,7 +50,7 @@ async function checkKeywords(message) {
     var result = keywordsRegExp.test(message.text);
     console.log("was a key found: " + result);
 
-    return keywordsRegExp.test(message.text);
+    return result;
   } catch (e) {
     console.log(e);
   }
