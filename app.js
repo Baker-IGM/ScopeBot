@@ -131,7 +131,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": getKeywords()
+              "text": getKeywords
             }
           },
           {
@@ -148,7 +148,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": getQuotes()
+              "text": getQuotes
             }
           }
         ]
