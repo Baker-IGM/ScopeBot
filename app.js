@@ -76,7 +76,7 @@ app.message(async ({
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": getQuote(message.user, rawdata.scopebook)
+            "text": getQuote(message.user, data.scopebook)
           }
         }]
       });
