@@ -45,19 +45,7 @@ async function checkKeywords(message) {
       keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
       console.log(keywordsRegExp);
 
-      if(keywordsRegExp.test(message.text))
-      {
-        // say() sends a message to the channel where the event was triggered
-        await say({
-          "blocks": [{
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": getQuote(message.user, rawdata.scopebook)
-            }
-          }]
-        });
-      }
+      return keywordsRegExp.test(message.text);
     });
   } catch (e) {
     console.log(e);
@@ -70,7 +58,21 @@ app.message(async ({
   say
 }) => {
   try {
-    await checkKeywords(message);
+    let result = await checkKeywords(message);
+
+    if(result)
+    {
+      // say() sends a message to the channel where the event was triggered
+      await say({
+        "blocks": [{
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "test"//getQuote(message.user, rawdata.scopebook)
+          }
+        }]
+      });
+    }
   } catch (error) {
     console.error(error);
   }
