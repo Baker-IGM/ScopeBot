@@ -43,7 +43,6 @@ async function checkKeywords(message) {
       let rawdata = JSON.parse(data);
 
       keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
-      console.log(keywordsRegExp);
 
       return keywordsRegExp.test(message.text);
     });
@@ -60,6 +59,7 @@ app.message(async ({
   try {
     let result = await checkKeywords(message);
 
+console.log(result);
     if(result)
     {
       // say() sends a message to the channel where the event was triggered
