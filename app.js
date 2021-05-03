@@ -26,8 +26,8 @@ const app = new App({
 })();
 
 //  Get a random quote for the user
-function getQuote(usr) {
-  let quote = rawdata.scopebook[Math.floor(Math.random() * rawdata.scopebook.length)];
+function getQuote(usr, quoteBook) {
+  let quote = quoteBook[Math.floor(Math.random() * quoteBook.length)];
 
   //  Add user's name to quote
   quote = quote.replace("$", "<@" + usr + ">");
@@ -40,9 +40,24 @@ async function checkKeywords(message) {
     fs.readFile('data.json', (err, data) => {
       if (err) throw err;
 
-      let keywords = JSON.parse(data);
+      let rawdata = JSON.parse(data);
 
-      console.log(keywords);
+      keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
+      console.log(keywordsRegExp);
+
+      if(message.text.test(keywordsRegExp))
+      {
+        // say() sends a message to the channel where the event was triggered
+        await say({
+          "blocks": [{
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": getQuote(message.user, rawdata.scopebook)
+            }
+          }]
+        });
+      }
     });
   } catch (e) {
     console.log(e);
