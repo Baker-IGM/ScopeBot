@@ -8,7 +8,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 const fs = require('fs');
 
-let rawdata;
 let homeView;
 
 // Initializes your app with your bot token and signing secret
@@ -40,8 +39,10 @@ async function checkKeywords(message) {
   try {
     fs.readFile('data.json', (err, data) => {
       if (err) throw err;
-      console.log(data);
-      return JSON.parse(data);
+
+      rawdata = JSON.parse(data);
+
+      console.log(rawdata.stringify());
     });
   } catch (e) {
     console.log(e);
