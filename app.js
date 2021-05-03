@@ -39,6 +39,7 @@ function getQuote(usr, quoteBook) {
   return quote;
 }
 
+//  Check if any of the key word phrases are in the message
 async function checkKeywords(message, keywords) {
   try {
     const keywordsRegExp = new RegExp(keywords.join("|"), 'gim');
@@ -49,9 +50,10 @@ async function checkKeywords(message, keywords) {
   }
 }
 
-async function loadData() {
+//  Load JSON data from a file
+async function loadData(file) {
   try {
-    const data = await readFile('data.json');
+    const data = await readFile(file);
 
     return await JSON.parse(data);
   } catch (e) {
@@ -65,7 +67,7 @@ app.message(async ({
   say
 }) => {
   try {
-    const data = await loadData();
+    const data = await loadData('data.json');
 
     const result = await checkKeywords(message.text, data.keywords);
 
@@ -86,37 +88,43 @@ app.message(async ({
   }
 });
 
-
-// subscribe to 'app_mention' event in your App config
-// need app_mentions:read and chat:write scopes
-app.event('app_mention', async ({
-  event,
-  context,
-  client,
-  say
-}) => {
-  try {
-    await say({
-      "blocks": [{
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": getQuote(event.user)
-        }
-      }]
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-
 // Listen for users opening your App Home
 app.event('app_home_opened', async ({
   event,
   client
 }) => {
   try {
+    const data = await loadData('data.json');
+
+    let homeView = await loadData('appHome.json');
+
+    //  Add keywords
+    for (let i = 0; i < data.keywords.length; i++) {
+      homeView.blocks.splice(3, 0, {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "- " + data.keywords[i]
+        }
+      });
+    }
+
+    //  Add quotes
+    for (let i = 0; i < data.scopebook.length; i++) {
+      let quote = data.scopebook[i];
+
+      //  Add user's name to quote
+      quote = quote.replace("$", "<@username>");
+
+      homeView.blocks.push({
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "- " + quote
+        }
+      });
+    }
+
     // Call views.publish with the built-in client
     const result = await client.views.publish({
       // Use the user ID associated with the event
