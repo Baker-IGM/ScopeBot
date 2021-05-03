@@ -37,12 +37,24 @@ const app = new App({
     if (err) throw err;
     homeView = JSON.parse(data);
 
+    //  Add keywords
     for (var i = 0; i < rawdata.keywords.length; i++) {
       homeView.blocks.splice(3, 0, {
         "type": "section",
         "text": {
           "type": "mrkdwn",
           "text": "- " + rawdata.keywords[i]
+        }
+      });
+    }
+
+    //  Add quotes
+    for (var i = 0; i < rawdata.scopebook.length; i++) {
+      homeView.blocks.push({
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "- " + rawdata.scopebook[i]
         }
       });
     }
