@@ -37,17 +37,19 @@ function getQuote(usr) {
   return quote;
 }
 
-async function checkKeywords(message)
-{
+async function checkKeywords(message) {
   try {
-    let response = await fetch('data.json');
+    let response = await fs.readFile('data.json', (err, data) => {
+      if (err) throw err;
+      return JSON.parse(data);
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     console.log(response.stringify());
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 }
