@@ -85,3 +85,69 @@ app.event('app_mention', async ({
     console.error(error);
   }
 });
+
+
+// Listen for users opening your App Home
+app.event('app_home_opened', async ({
+  event,
+  client
+}) => {
+  try {
+    // Call views.publish with the built-in client
+    const result = await client.views.publish({
+      // Use the user ID associated with the event
+      user_id: event.user,
+      view: {
+        // Home tabs must be enabled in your app configuration page under "App Home"
+        "type": "home",
+        "blocks": [{
+            "type": "header",
+            "text": {
+              "type": "plain_text",
+              "text": "ScopeBot Home",
+              "emoji": true
+            }
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "*Keywords:* \nThese are the phases that can trigger an out of scope error."
+            }
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "- " + rawdata.keywords.join("\n- ");
+            }
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "*Quotes:* \nThese are the out of scope error messasges."
+            }
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "- " + rawdata.scopebook.join("\n- ");
+            }
+          }
+        ]
+      }
+    });
+
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+});
