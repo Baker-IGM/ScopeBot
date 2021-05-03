@@ -72,7 +72,6 @@ app.message(async ({
       user: message.user
     });
 
-    console.log(userData);
     if (!userData.is_bot) {
       const data = await loadData('data.json');
 
