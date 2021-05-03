@@ -78,7 +78,7 @@ app.message(async ({
 
       const result = await checkKeywords(message.text, data.keywords);
 
-      if (!isUser && result) {
+      if (result) {
         // say() sends a message to the channel where the event was triggered
         await say({
           "blocks": [{
