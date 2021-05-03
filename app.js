@@ -61,41 +61,35 @@ async function loadData(file) {
   }
 }
 
-async function checkIfUser(userId) {
-  try {
-    const result = await client.users.info({
-      user: userId
-    });
-
-    return await result.user.is_bot;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 // Listens to incoming messages that contain "hello"
 app.message(async ({
   message,
+  client,
   say
 }) => {
   try {
-    const isBot = await checkIfUser(message.user);
+    const userData = await client.users.info({
+      user: userId
+    });
 
-    const data = await loadData('data.json');
+    console.log(userData);
+    if (!userData.is_bot) {
+      const data = await loadData('data.json');
 
-    const result = await checkKeywords(message.text, data.keywords);
+      const result = await checkKeywords(message.text, data.keywords);
 
-    if (!isUser && result) {
-      // say() sends a message to the channel where the event was triggered
-      await say({
-        "blocks": [{
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": getQuote(message.user, data.scopebook)
-          }
-        }]
-      });
+      if (!isUser && result) {
+        // say() sends a message to the channel where the event was triggered
+        await say({
+          "blocks": [{
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": getQuote(message.user, data.scopebook)
+            }
+          }]
+        });
+      }
     }
   } catch (error) {
     console.error(error);
