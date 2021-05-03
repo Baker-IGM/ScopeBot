@@ -100,7 +100,8 @@ app.event('app_home_opened', async ({
       view: {
         // Home tabs must be enabled in your app configuration page under "App Home"
         "type": "home",
-        "blocks": [{
+        "blocks": [
+          {
             "type": "header",
             "text": {
               "type": "plain_text",
@@ -122,7 +123,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "- "
+              "text": "- feature\n- it would be cool if"
             }
           },
           {
@@ -145,6 +146,8 @@ app.event('app_home_opened', async ({
         ]
       }
     });
+
+    console.log(result);
   } catch (error) {
     console.error(error);
   }
