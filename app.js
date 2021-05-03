@@ -39,18 +39,27 @@ function getQuote(usr, quoteBook) {
   return quote;
 }
 
-async function checkKeywords(message) {
+async function checkKeywords(message, keywords) {
   try {
-    const data = await readFile('data.json');
+    const keywordsRegExp = new RegExp(keywords.join("|"), 'gim');
 
-    let rawdata = JSON.parse(data);
-
-    const keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
-
-    var result = keywordsRegExp.test(message.text);
+    const result = keywordsRegExp.test(message);
     console.log("was a key found: " + result);
 
     return result;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function loadData()
+{
+  try {
+    const data = await readFile('data.json');
+
+    const rawdata = JSON.parse(data);
+
+    return rawdata;
   } catch (e) {
     console.log(e);
   }
@@ -64,9 +73,12 @@ app.message(async ({
   say
 }) => {
   try {
-    let result = await checkKeywords(message);
+    const data = loadData();
+    console.log(data);
 
+    const result = await checkKeywords(message.text, data.keywords);
     console.log("should send message: " + result);
+
     if (result) {
       // say() sends a message to the channel where the event was triggered
       await say({
