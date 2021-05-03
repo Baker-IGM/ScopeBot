@@ -37,7 +37,7 @@ function getQuote(usr, quoteBook) {
 
 async function checkKeywords(message) {
   try {
-    fs.readFile('data.json', async (err, data) => {
+    fs.readFile('data.json', (err, data) => {
       if (err) throw err;
 
       let rawdata = JSON.parse(data);
@@ -45,7 +45,7 @@ async function checkKeywords(message) {
       keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
 
       var result = keywordsRegExp.test(message.text);
-      console.log(result);
+      console.log("was a key found: " + result);
 
       return keywordsRegExp.test(message.text);
     });
@@ -62,7 +62,7 @@ app.message(async ({
   try {
     let result = await checkKeywords(message);
 
-    console.log(result);
+    console.log("should a message be sent? " + result);
     if(result)
     {
       // say() sends a message to the channel where the event was triggered
