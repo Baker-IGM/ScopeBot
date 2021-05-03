@@ -59,8 +59,6 @@ async function loadData() {
   }
 }
 
-
-
 // Listens to incoming messages that contain "hello"
 app.message(async ({
   message,
@@ -78,7 +76,7 @@ app.message(async ({
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": "test" //getQuote(message.user, rawdata.scopebook)
+            "text": getQuote(message.user, rawdata.scopebook)
           }
         }]
       });
