@@ -40,9 +40,9 @@ async function checkKeywords(message) {
     fs.readFile('data.json', (err, data) => {
       if (err) throw err;
 
-      rawdata = JSON.parse(data);
+      let rawdata = JSON.parse(data);
 
-      console.log(rawdata.stringify());
+      console.log(rawdata);
     });
   } catch (e) {
     console.log(e);
