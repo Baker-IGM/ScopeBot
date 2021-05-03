@@ -150,7 +150,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": quotes
+              "text": "quotes"
             }
           }
         ]
