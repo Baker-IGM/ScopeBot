@@ -50,11 +50,16 @@ const app = new App({
 
     //  Add quotes
     for (var i = 0; i < rawdata.scopebook.length; i++) {
+      var quote = rawdata.scopebook[i];
+
+      //  Add user's name to quote
+      quote = quote.replace("$", "<@username>");
+
       homeView.blocks.push({
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": "- " + rawdata.scopebook[i]
+          "text": "- " + quote
         }
       });
     }
@@ -71,60 +76,6 @@ function getQuote(usr) {
   quote = quote.replace("$", "<@" + usr + ">");
 
   return quote;
-}
-
-function buildHomeView() {
-  let homeObj = {
-    "type": "home",
-    "blocks": [{
-        "type": "header",
-        "text": {
-          "type": "plain_text",
-          "text": "ScopeBot Home",
-          "emoji": true
-        }
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": "*Keywords:* \nThese are the phases that can trigger an out of scope error."
-        }
-      }
-    ]
-  };
-
-  //  Add keyword blocks
-  for (i in rawdata.keywords) {
-    homeObj.blocks += {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "- " + rawdata.keywords[i]
-      }
-    }
-  }
-
-  return keywords;
-}
-
-function getQuotes() {
-  quotes = {};
-
-  for (i in rawdata.keywords) {
-    quotes += {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "- " + rawdata.keywords[i]
-      }
-    }
-  }
-
-  return quotes;
 }
 
 // Listens to incoming messages that contain "hello"
