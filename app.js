@@ -57,12 +57,22 @@ function getKeywords() {
     }
   }
 
-  console.log(keywords);
   return keywords;
 }
 
 function getQuotes() {
-  return "- " + rawdata.scopebook.join("\n- ");
+  quotes = {};
+
+  for (q in rawdata.scopebook) {
+    quotes += {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "- " + k
+      }
+    }
+  }
+  return quotes;
 }
 
 // Listens to incoming messages that contain "hello"
@@ -113,8 +123,6 @@ app.event('app_home_opened', async ({
   client
 }) => {
   try {
-    const quotes = new String("- " + rawdata.scopebook.join("- "));
-
     // Call views.publish with the built-in client
     const result = await client.views.publish({
       // Use the user ID associated with the event
@@ -151,13 +159,7 @@ app.event('app_home_opened', async ({
               "text": "*Quotes:* \nThese are the out of scope error messasges."
             }
           },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "quotes"
-            }
-          }
+          getQuotes()
         ]
       }
     });
