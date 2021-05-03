@@ -70,7 +70,7 @@ app.message(async ({
   say
 }) => {
   try {
-    const data = loadData();
+    const data = await loadData();
     console.log(data);
 
     const result = await checkKeywords(message.text, data.keywords);
