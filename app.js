@@ -37,7 +37,7 @@ function getQuote(usr, quoteBook) {
 
 async function checkKeywords(message) {
   try {
-    fs.readFile('data.json', (err, data) => {
+    fs.readFile('data.json', async (err, data) => {
       if (err) throw err;
 
       let rawdata = JSON.parse(data);
@@ -65,15 +65,14 @@ app.message(async ({
     let result = await checkKeywords(message);
 
     console.log("should a message be sent? " + result);
-    if(result)
-    {
+    if (result) {
       // say() sends a message to the channel where the event was triggered
       await say({
         "blocks": [{
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": "test"//getQuote(message.user, rawdata.scopebook)
+            "text": "test" //getQuote(message.user, rawdata.scopebook)
           }
         }]
       });
