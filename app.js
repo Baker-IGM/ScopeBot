@@ -45,7 +45,7 @@ async function checkKeywords(message) {
       keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
       console.log(keywordsRegExp);
 
-      if(message.text.test(keywordsRegExp))
+      if(keywordsRegExp.test(message.text))
       {
         // say() sends a message to the channel where the event was triggered
         await say({
