@@ -63,8 +63,6 @@ const app = new App({
         }
       });
     }
-
-    console.log(JSON.stringify(homeView));
   });
 })();
 
