@@ -68,7 +68,7 @@ function getQuotes() {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "- " + k
+        "text": "- " + q
       }
     }
   }
