@@ -31,7 +31,6 @@ const app = new App({
     rawdata = JSON.parse(data);
 
     keywords = new RegExp(rawdata.keywords.join("|"), 'gim');
-    console.log(keywords);
   });
 })();
 
@@ -101,6 +100,9 @@ app.event('app_home_opened', async ({
   client
 }) => {
   try {
+    const keywords = "- " + rawdata.keywords.join("\n- ");
+    const quotes = "- " + rawdata.scopebook.join("\n- ");
+
     // Call views.publish with the built-in client
     const result = await client.views.publish({
       // Use the user ID associated with the event
@@ -131,7 +133,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": getKeywords
+              "text": keywords
             }
           },
           {
@@ -148,7 +150,7 @@ app.event('app_home_opened', async ({
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": getQuotes
+              "text": quotes
             }
           }
         ]
