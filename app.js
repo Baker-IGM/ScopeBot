@@ -47,12 +47,14 @@ async function checkKeywords(message) {
       var result = keywordsRegExp.test(message.text);
       console.log("was a key found: " + result);
 
-      return keywordsRegExp.test(message.text);
+      return await keywordsRegExp.test(message.text);
     });
   } catch (e) {
     console.log(e);
   }
 }
+
+
 
 // Listens to incoming messages that contain "hello"
 app.message(async ({
