@@ -145,8 +145,6 @@ app.event('app_home_opened', async ({
         ]
       }
     });
-
-    console.log(result);
   } catch (error) {
     console.error(error);
   }
