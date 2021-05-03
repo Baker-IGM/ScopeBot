@@ -100,7 +100,7 @@ app.event('app_home_opened', async ({
   client
 }) => {
   try {
-    const keywords = new String("- " + rawdata.keywords.join("- "));
+    const keywords = new String("- " + rawdata.keywords.join("\n- "));
     const quotes = new String("- " + rawdata.scopebook.join("- "));
 
     // Call views.publish with the built-in client
