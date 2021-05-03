@@ -69,7 +69,7 @@ app.message(async ({
 }) => {
   try {
     const userData = await client.users.info({
-      user: userId
+      user: message.user
     });
 
     console.log(userData);
