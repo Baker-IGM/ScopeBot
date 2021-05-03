@@ -68,8 +68,19 @@ function getQuote(usr) {
   return quote;
 }
 
-function containsKeyphase(msg) {
+async function checkKeywords(message)
+{
+  try {
+    let response = await fetch('data.json');
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    console.log(response.stringify());
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 // Listens to incoming messages that contain "hello"
@@ -78,26 +89,7 @@ app.message(async ({
   say
 }) => {
   try {
-    fetch
-    fs.readFile('data.json', async (err, data) => {
-      if (err) throw err;
-      rawdata = JSON.parse(data);
-
-      keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
-
-      if (message.text.test(keywordsRegExp)) {
-        // say() sends a message to the channel where the event was triggered
-        await say({
-          "blocks": [{
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": getQuote(message.user)
-            }
-          }]
-        });
-      }
-    });
+    await checkKeywords(message);
   } catch (error) {
     console.error(error);
   }
