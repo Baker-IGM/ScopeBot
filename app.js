@@ -52,14 +52,11 @@ async function checkKeywords(message, keywords) {
   }
 }
 
-async function loadData()
-{
+async function loadData() {
   try {
     const data = await readFile('data.json');
 
-    const rawdata = JSON.parse(data);
-
-    return rawdata;
+    return await JSON.parse(data);
   } catch (e) {
     console.log(e);
   }
