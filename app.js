@@ -10,7 +10,6 @@ const fs = require('fs');
 
 let rawdata;
 let homeView;
-let keywordsRegExp;
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
@@ -25,13 +24,6 @@ const app = new App({
   await app.start(process.env.PORT || 3000);
 
   console.log('⚡️ Bolt app is running!');
-
-  fs.readFile('data.json', (err, data) => {
-    if (err) throw err;
-    rawdata = JSON.parse(data);
-
-    keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
-  });
 
   fs.readFile('appHome.json', (err, data) => {
     if (err) throw err;
@@ -76,21 +68,38 @@ function getQuote(usr) {
   return quote;
 }
 
+function containsKeyphase(msg) {
+
+}
+
 // Listens to incoming messages that contain "hello"
-app.message(/feature|it would be cool if|idea|let's make|let's add|what if|project|i had a thought|i was thinking|talking about|new/gim, async ({
+app.message(async ({
   message,
   say
 }) => {
-  // say() sends a message to the channel where the event was triggered
-  await say({
-    "blocks": [{
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": getQuote(message.user)
+  try {
+    fs.readFile('data.json', (err, data) => {
+      if (err) throw err;
+      rawdata = JSON.parse(data);
+
+      keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
+
+      if (message.text.test(keywordsRegExp)) {
+        // say() sends a message to the channel where the event was triggered
+        await say({
+          "blocks": [{
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": getQuote(message.user)
+            }
+          }]
+        });
       }
-    }]
-  });
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 
