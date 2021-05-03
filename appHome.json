@@ -1,0 +1,33 @@
+{
+  "type": "home",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "ScopeBot Home",
+        "emoji": true
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Keywords:* \nThese are the phases that can trigger an out of scope error."
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Quotes:* \nThese are the out of scope error messasges."
+      }
+    }
+  ]
+}

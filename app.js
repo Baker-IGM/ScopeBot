@@ -9,7 +9,7 @@ if (process.env.NODE_ENV !== 'production') {
 const fs = require('fs');
 
 let rawdata;
-
+let homeView;
 let keywordsRegExp;
 
 // Initializes your app with your bot token and signing secret
@@ -32,6 +32,23 @@ const app = new App({
 
     keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
   });
+
+  fs.readFile('appHome.json', (err, data) => {
+    if (err) throw err;
+    homeView = JSON.parse(data);
+
+    for (var i = 0; i < rawdata.keywords.length; i++) {
+      homeView.blocks.splice(3, 0, {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "- " + rawdata.keywords[i]
+        }
+      });
+    }
+
+    console.log(JSON.stringify(homeView));
+  });
 })();
 
 //  Get a random quote for the user
@@ -45,7 +62,7 @@ function getQuote(usr) {
 }
 
 function buildHomeView() {
-  homeObj = {
+  let homeObj = {
     "type": "home",
     "blocks": [{
         "type": "header",
@@ -79,30 +96,7 @@ function buildHomeView() {
     }
   }
 
-  //  Add quotes section
-  homeObj.blocks += {
-    "type": "divider"
-  };
-  homeObj.blocks += {
-    "type": "section",
-    "text": {
-      "type": "mrkdwn",
-      "text": "*Quotes:* \nThese are the out of scope error messasges."
-    }
-  };
-
-  //  Add keyword blocks
-  for (i in rawdata.scopebook) {
-    homeObj.blocks += {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "- " + rawdata.scopebook[i]
-      }
-    }
-  }
-
-  return homeObj;
+  return keywords;
 }
 
 function getQuotes() {
@@ -173,7 +167,7 @@ app.event('app_home_opened', async ({
     const result = await client.views.publish({
       // Use the user ID associated with the event
       user_id: event.user,
-      view: buildHomeView()
+      view: homeView
     });
   } catch (error) {
     console.error(error);
