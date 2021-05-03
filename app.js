@@ -37,7 +37,7 @@ function getQuote(usr, quoteBook) {
 
 async function checkKeywords(message) {
   try {
-    fs.readFile('data.json', (err, data) => {
+    fs.readFile('data.json', async (err, data) => {
       if (err) throw err;
 
       let rawdata = JSON.parse(data);
