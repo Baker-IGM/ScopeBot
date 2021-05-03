@@ -63,16 +63,16 @@ function getKeywords() {
 function getQuotes() {
   quotes = {};
 
-  for (i in rawdata.scopebook) {
+  for (i in rawdata.keywords) {
     quotes += {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "- " + rawdata.scopebook[i]
+        "text": "- " + rawdata.keywords[i]
       }
     }
   }
-  console.log(JSON.stringify(quotes));
+
   return quotes;
 }
 
