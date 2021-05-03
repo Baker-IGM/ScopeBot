@@ -61,17 +61,31 @@ async function loadData(file) {
   }
 }
 
+async function checkIfUser(userId) {
+  try {
+    const result = await client.users.info({
+      user: userId
+    });
+
+    return await result.user.is_bot;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 // Listens to incoming messages that contain "hello"
 app.message(async ({
   message,
   say
 }) => {
   try {
+    const isBot = await checkIfUser(message.user);
+
     const data = await loadData('data.json');
 
     const result = await checkKeywords(message.text, data.keywords);
 
-    if (result) {
+    if (!isUser && result) {
       // say() sends a message to the channel where the event was triggered
       await say({
         "blocks": [{
