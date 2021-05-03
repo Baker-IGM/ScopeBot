@@ -102,7 +102,7 @@ function buildHomeView() {
     }
   }
 
-  return keywords;
+  return homeObj;
 }
 
 function getQuotes() {
