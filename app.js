@@ -6,7 +6,11 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-const fs = require('fs');
+const {
+  promisify
+} = require("util");
+const fs = require("fs");
+const readFile = promisify(fs.readFile);
 
 let homeView;
 
@@ -37,18 +41,16 @@ function getQuote(usr, quoteBook) {
 
 async function checkKeywords(message) {
   try {
-    fs.readFile('data.json', async (err, data) => {
-      if (err) throw err;
+    const data = await readFile('data.json');
 
-      let rawdata = JSON.parse(data);
+    let rawdata = JSON.parse(data);
 
-      keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
+    keywordsRegExp = new RegExp(rawdata.keywords.join("|"), 'gim');
 
-      var result = keywordsRegExp.test(message.text);
-      console.log("was a key found: " + result);
+    var result = keywordsRegExp.test(message.text);
+    console.log("was a key found: " + result);
 
-      return await keywordsRegExp.test(message.text);
-    });
+    return keywordsRegExp.test(message.text);
   } catch (e) {
     console.log(e);
   }
@@ -64,7 +66,6 @@ app.message(async ({
   try {
     let result = await checkKeywords(message);
 
-    console.log("should a message be sent? " + result);
     if (result) {
       // say() sends a message to the channel where the event was triggered
       await say({
