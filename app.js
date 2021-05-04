@@ -84,7 +84,6 @@ app.message(async ({
   payload
 }) => {
   try {
-    console.log(payload);
     const userData = await client.users.info({
       user: message.user
     });
@@ -102,7 +101,7 @@ app.message(async ({
         scopeValue -= matches.length * data.randomValues.matchIncrease;
       }
 
-      console.log("Amount of over scope: " + scopeValue);
+      //console.log("Amount of over scope: " + scopeValue);
 
       if (scopeValue <= data.randomValues.limit) {
         let sayPost = {
@@ -114,6 +113,15 @@ app.message(async ({
             }
           }]
         };
+
+        if("thread_ts" in payload)
+        {
+          console.log("in thread");
+          sayPost.thread_ts = payload.thread_ts;
+        }
+        else {
+          console.log("in channel");
+        }
 
         // say() sends a message to the channel where the event was triggered
         await say(sayPost);
