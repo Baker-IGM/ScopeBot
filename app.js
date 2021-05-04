@@ -116,11 +116,7 @@ app.message(async ({
 
         if("thread_ts" in payload)
         {
-          console.log("in thread");
           sayPost.thread_ts = payload.thread_ts;
-        }
-        else {
-          console.log("in channel");
         }
 
         // say() sends a message to the channel where the event was triggered
