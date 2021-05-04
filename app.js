@@ -81,10 +81,10 @@ app.message(async ({
   message,
   client,
   say,
-  context
+  payload
 }) => {
   try {
-    console.log(context);
+    console.log(payload);
     const userData = await client.users.info({
       user: message.user
     });
