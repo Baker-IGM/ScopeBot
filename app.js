@@ -91,25 +91,28 @@ app.message(async ({
     if (!userData.is_bot) {
       const data = await loadData('data.json');
 
+      let scopeValue = getRndInteger(data.randomValues.max);
+
       const matches = await getRegExMatches(message.text, data.keywords);
 
       //  check of any matches were found in the message
       if (matches !== null) {
-        const scopeValue = getRndInteger(data.randomValues.max) - (matches.length * data.randomValues.matchIncrease);
-        console.log("Amount of over scope: " + scopeValue);
-        
-        if (scopeValue <= data.randomValues.limit) {
-          // say() sends a message to the channel where the event was triggered
-          await say({
-            "blocks": [{
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": getQuote(message.user, data.scopebook)
-              }
-            }]
-          });
-        }
+        const scopeValue -= matches.length * data.randomValues.matchIncrease;
+      }
+
+      console.log("Amount of over scope: " + scopeValue);
+
+      if (scopeValue <= data.randomValues.limit) {
+        // say() sends a message to the channel where the event was triggered
+        await say({
+          "blocks": [{
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": getQuote(message.user, data.scopebook)
+            }
+          }]
+        });
       }
     }
   } catch (error) {
