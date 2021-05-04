@@ -56,6 +56,13 @@
     "\"I *had* to kill somebody in the intro.  It's a basic part of managing scope.\" - !Frank Mentzer",
     "\"This game requires exactly 18 lines of text.  I don't think I've ever agonised over scope so much before.\" - !Terry Cavanagh"
   ],
+  "randomValues": {
+    "max": 100,
+    "matchIncrease": 25,
+    "limit": 25
+  }
+  "randomMax" : 100,
+  ""
   "cooldowns": {},
   "scopecounter": {}
 }

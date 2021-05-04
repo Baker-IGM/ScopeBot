@@ -61,6 +61,10 @@ async function getRegExMatches(message, keywords) {
   }
 }
 
+function getRndInteger(max) {
+  return Math.floor(Math.random() * (max));
+}
+
 //  Load JSON data from a file
 async function loadData(file) {
   try {
@@ -91,18 +95,21 @@ app.message(async ({
 
       //  check of any matches were found in the message
       if (matches !== null) {
-        console.log("found " + matches.length + " matches");
-
-        // say() sends a message to the channel where the event was triggered
-        await say({
-          "blocks": [{
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": getQuote(message.user, data.scopebook)
-            }
-          }]
-        });
+        const scopeValue = getRndInteger(data.randomValues.max) - (matches.length * data.randomValues.matchIncrease);
+        console.log("Amount of over scope: " + scopeValue);
+        
+        if (scopeValue <= data.randomValues.limit) {
+          // say() sends a message to the channel where the event was triggered
+          await say({
+            "blocks": [{
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": getQuote(message.user, data.scopebook)
+              }
+            }]
+          });
+        }
       }
     }
   } catch (error) {
