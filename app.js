@@ -50,6 +50,17 @@ async function checkKeywords(message, keywords) {
   }
 }
 
+//  Finds all the matches of the key word phrases in the message
+async function getRegExMatches(message, keywords) {
+  try {
+    const keywordsRegExp = new RegExp(keywords.join("|"), 'gim');
+
+    return await message.match(keywordsRegExp);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 //  Load JSON data from a file
 async function loadData(file) {
   try {
@@ -76,6 +87,9 @@ app.message(async ({
       const data = await loadData('data.json');
 
       const result = await checkKeywords(message.text, data.keywords);
+
+      const matches = await getRegExMatches(message.text, data.keywords);
+      console.log("found " + matches.length + " matches");
 
       if (result) {
         // say() sends a message to the channel where the event was triggered
