@@ -80,9 +80,11 @@ async function loadData(file) {
 app.message(async ({
   message,
   client,
-  say
+  say,
+  context
 }) => {
   try {
+    console.log(context);
     const userData = await client.users.info({
       user: message.user
     });
