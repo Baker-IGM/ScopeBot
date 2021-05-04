@@ -97,7 +97,7 @@ app.message(async ({
 
       //  check of any matches were found in the message
       if (matches !== null) {
-        const scopeValue -= matches.length * data.randomValues.matchIncrease;
+        scopeValue -= matches.length * data.randomValues.matchIncrease;
       }
 
       console.log("Amount of over scope: " + scopeValue);
