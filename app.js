@@ -105,8 +105,7 @@ app.message(async ({
       console.log("Amount of over scope: " + scopeValue);
 
       if (scopeValue <= data.randomValues.limit) {
-        // say() sends a message to the channel where the event was triggered
-        await say({
+        let sayPost = {
           "blocks": [{
             "type": "section",
             "text": {
@@ -114,7 +113,10 @@ app.message(async ({
               "text": getQuote(message.user, data.scopebook)
             }
           }]
-        });
+        };
+
+        // say() sends a message to the channel where the event was triggered
+        await say(sayPost);
       }
     }
   } catch (error) {
