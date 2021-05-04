@@ -83,15 +83,16 @@ app.message(async ({
       user: message.user
     });
 
+    //  match sure this is a message from a human user
     if (!userData.is_bot) {
       const data = await loadData('data.json');
 
-      const result = await checkKeywords(message.text, data.keywords);
-
       const matches = await getRegExMatches(message.text, data.keywords);
-      console.log("found " + matches.length + " matches");
 
-      if (result) {
+      //  check of any matches were found in the message
+      if (matches !== null) {
+        console.log("found " + matches.length + " matches");
+
         // say() sends a message to the channel where the event was triggered
         await say({
           "blocks": [{
