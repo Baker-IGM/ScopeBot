@@ -60,9 +60,7 @@
     "max": 100,
     "matchIncrease": 25,
     "limit": 25
-  }
-  "randomMax" : 100,
-  ""
+  },
   "cooldowns": {},
   "scopecounter": {}
 }
