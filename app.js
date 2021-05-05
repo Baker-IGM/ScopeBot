@@ -28,7 +28,7 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
-  stateSecret: 'GEMtYHX6XoJJvrBo',
+  stateSecret: process.env.STATE_SECRET,
   scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
   socketMode: true,
   appToken: process.env.APP_TOKEN,
