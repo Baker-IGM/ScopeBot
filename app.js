@@ -12,6 +12,17 @@ const {
 const fs = require("fs");
 const readFile = promisify(fs.readFile);
 
+const {
+  Client
+} = require('pg');
+const pgClient = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.BOT_TOKEN,
@@ -23,6 +34,8 @@ const app = new App({
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3000);
+
+  client.connect();
 
   console.log('⚡️ Bolt app is running!');
 })();
@@ -112,8 +125,7 @@ app.message(async ({
           }]
         };
 
-        if("thread_ts" in payload)
-        {
+        if ("thread_ts" in payload) {
           sayPost.thread_ts = payload.thread_ts;
         }
 
