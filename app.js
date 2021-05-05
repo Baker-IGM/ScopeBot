@@ -31,6 +31,7 @@ const app = new App({
   stateSecret: 'GEMtYHX6XoJJvrBo',
   scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
   socketMode: true,
+  appToken: process.env.APP_TOKEN,
   installationStore: {
     storeInstallation: async (installation) => {
       // change the line below so it saves to your database
