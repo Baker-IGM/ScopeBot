@@ -12,8 +12,6 @@ const {
 const fs = require("fs");
 const readFile = promisify(fs.readFile);
 
-let homeView;
-
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.BOT_TOKEN,
