@@ -227,6 +227,6 @@ async function sendQuery(query)
   } catch (e) {
     console.log(e.stack);
   } finally {
-    client.close();
+    pgClient.close();
   }
 }
