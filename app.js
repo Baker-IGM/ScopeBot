@@ -34,10 +34,11 @@ const app = new App({
   appToken: process.env.APP_TOKEN,
   installationStore: {
     storeInstallation: async (installation) => {
+      console.log(installation);
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
         // support for org wide app installation
-        console.log(installation);
+
         return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //pgClient.set(installation.enterprise.id, installation);
       } else {
         // single team app installation
@@ -46,6 +47,7 @@ const app = new App({
       throw new Error('Failed saving installation data to installationStore');
     },
     fetchInstallation: async (installQuery) => {
+      console.log(installQuery);
       // change the line below so it fetches from your database
       if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
         // org wide app installation lookup
