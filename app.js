@@ -65,6 +65,8 @@ const app = new App({
   // Start your app
   await app.start(process.env.PORT || 3000);
 
+  await sendQuery(createQuery);
+
   console.log('⚡️ Bolt app is running!');
 })();
 
@@ -213,3 +215,18 @@ app.event('app_home_opened', async ({
     console.error(error);
   }
 });
+
+
+//  Postgres Functions
+const createQuery = 'CREATE TABLE installs (id int, install varchar);';
+
+async function sendQuery(query)
+{
+  try {
+    const res = await pgClient.query(query);
+  } catch (e) {
+    console.log(e.stack);
+  } finally {
+    client.close();
+  }
+}
