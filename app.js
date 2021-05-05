@@ -64,7 +64,7 @@ const app = new App({
   // Start your app
   await app.start(process.env.PORT || 3000);
 
-  client.connect();
+  pgClient.connect();
 
   console.log('⚡️ Bolt app is running!');
 })();
