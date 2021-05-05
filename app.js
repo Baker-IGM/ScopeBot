@@ -25,9 +25,37 @@ const pgClient = new Client({
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
-  token: process.env.BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  stateSecret: 'GEMtYHX6XoJJvrBo',
+  scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
   socketMode: true,
-  appToken: process.env.APP_TOKEN,
+  installationStore: {
+    storeInstallation: async (installation) => {
+      // change the line below so it saves to your database
+      if (installation.isEnterpriseInstall) {
+        // support for org wide app installation
+        return await database.set(installation.enterprise.id, installation);
+      } else {
+        // single team app installation
+        return await database.set(installation.team.id, installation);
+      }
+      throw new Error('Failed saving installation data to installationStore');
+    },
+    fetchInstallation: async (installQuery) => {
+      // change the line below so it fetches from your database
+      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
+        // org wide app installation lookup
+        return await database.get(installQuery.enterpriseId);
+      }
+      if (installQuery.teamId !== undefined) {
+        // single team app installation lookup
+        return await database.get(installQuery.teamId);
+      }
+      throw new Error('Failed fetching installation');
+    },
+  },
 });
 
 //  Start app
