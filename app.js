@@ -37,10 +37,10 @@ const app = new App({
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
         // support for org wide app installation
-        return await pgClient.set(installation.enterprise.id, installation);
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //pgClient.set(installation.enterprise.id, installation);
       } else {
         // single team app installation
-        return await pgClient.set(installation.team.id, installation);
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.team.id + ', ' + installation + ')') //pgClient.set(installation.team.id, installation);
       }
       throw new Error('Failed saving installation data to installationStore');
     },
@@ -64,7 +64,7 @@ const app = new App({
   // Start your app
   await app.start(process.env.PORT || 3000);
 
-  await sendQuery(createQuery);
+  //await sendQuery(createQuery);
 
   console.log('⚡️ Bolt app is running!');
 })();
@@ -219,8 +219,7 @@ app.event('app_home_opened', async ({
 //  Postgres Functions
 const createQuery = 'CREATE TABLE installs (id int, install varchar);';
 
-async function sendQuery(query)
-{
+async function sendQuery(query) {
   try {
     const res = await pgClient.query(query);
   } catch (e) {
