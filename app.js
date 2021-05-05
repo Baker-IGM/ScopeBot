@@ -21,6 +21,7 @@ const pgClient = new Client({
     rejectUnauthorized: false
   }
 });
+pgClient.connect();
 
 
 // Initializes your app with your bot token and signing secret
@@ -37,10 +38,10 @@ const app = new App({
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
         // support for org wide app installation
-        return await database.set(installation.enterprise.id, installation);
+        return await pgClient.set(installation.enterprise.id, installation);
       } else {
         // single team app installation
-        return await database.set(installation.team.id, installation);
+        return await pgClient.set(installation.team.id, installation);
       }
       throw new Error('Failed saving installation data to installationStore');
     },
@@ -48,11 +49,11 @@ const app = new App({
       // change the line below so it fetches from your database
       if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
         // org wide app installation lookup
-        return await database.get(installQuery.enterpriseId);
+        return await pgClient.get(installQuery.enterpriseId);
       }
       if (installQuery.teamId !== undefined) {
         // single team app installation lookup
-        return await database.get(installQuery.teamId);
+        return await pgClient.get(installQuery.teamId);
       }
       throw new Error('Failed fetching installation');
     },
@@ -63,8 +64,6 @@ const app = new App({
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3000);
-
-  pgClient.connect();
 
   console.log('⚡️ Bolt app is running!');
 })();
