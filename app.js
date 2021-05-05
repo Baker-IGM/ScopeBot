@@ -21,7 +21,6 @@ const pgClient = new Client({
     rejectUnauthorized: false
   }
 });
-pgClient.connect();
 
 
 // Initializes your app with your bot token and signing secret
@@ -65,6 +64,7 @@ const app = new App({
   // Start your app
   await app.start(process.env.PORT || 3000);
 
+  await pgClient.connect();
   await sendQuery(createQuery);
 
   console.log('⚡️ Bolt app is running!');
