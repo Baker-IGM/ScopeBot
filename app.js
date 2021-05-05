@@ -37,6 +37,7 @@ const app = new App({
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
         // support for org wide app installation
+        console.log(installation);
         return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //pgClient.set(installation.enterprise.id, installation);
       } else {
         // single team app installation
