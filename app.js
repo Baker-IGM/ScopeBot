@@ -82,44 +82,44 @@ app.message(async ({
   payload
 }) => {
   try {
-    const userData = await client.users.info({
-      user: message.user
-    });
+    if (message.user !== undefined) {
+      const userData = await client.users.info({
+        user: message.user
+      });
+      
+      //  match sure this is a message from a human user
+      if (!userData.is_bot) {
+        const data = await loadData('data.json');
 
-      console.log(userData);
-    //  match sure this is a message from a human user
-    if (!userData.is_bot) {
-      const data = await loadData('data.json');
+        let scopeValue = getRndInteger(data.randomValues.max);
 
-      let scopeValue = getRndInteger(data.randomValues.max);
+        const matches = await getRegExMatches(message.text, data.keywords);
 
-      const matches = await getRegExMatches(message.text, data.keywords);
-
-      //  check of any matches were found in the message
-      if (matches !== null) {
-        scopeValue -= matches.length * data.randomValues.matchIncrease;
-      }
-
-      //console.log("Amount of over scope: " + scopeValue);
-
-      if (scopeValue <= data.randomValues.limit) {
-        let sayPost = {
-          "blocks": [{
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": getQuote(message.user, data.scopebook)
-            }
-          }]
-        };
-
-        if("thread_ts" in payload)
-        {
-          sayPost.thread_ts = payload.thread_ts;
+        //  check of any matches were found in the message
+        if (matches !== null) {
+          scopeValue -= matches.length * data.randomValues.matchIncrease;
         }
 
-        // say() sends a message to the channel where the event was triggered
-        await say(sayPost);
+        //console.log("Amount of over scope: " + scopeValue);
+
+        if (scopeValue <= data.randomValues.limit) {
+          let sayPost = {
+            "blocks": [{
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": getQuote(message.user, data.scopebook)
+              }
+            }]
+          };
+
+          if ("thread_ts" in payload) {
+            sayPost.thread_ts = payload.thread_ts;
+          }
+
+          // say() sends a message to the channel where the event was triggered
+          await say(sayPost);
+        }
       }
     }
   } catch (error) {
