@@ -82,11 +82,11 @@ app.message(async ({
   payload
 }) => {
   try {
-    console.log(message.user);
     const userData = await client.users.info({
       user: message.user
     });
 
+      console.log(userData);
     //  match sure this is a message from a human user
     if (!userData.is_bot) {
       const data = await loadData('data.json');
