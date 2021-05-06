@@ -82,6 +82,7 @@ app.message(async ({
   payload
 }) => {
   try {
+    console.log(message.user);
     const userData = await client.users.info({
       user: message.user
     });
