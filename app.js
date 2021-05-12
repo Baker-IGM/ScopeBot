@@ -215,3 +215,17 @@ app.event('app_home_opened', async ({
     console.error(error);
   }
 });
+
+
+// Listen for an event from the Events API
+app.event('url_verification', async ({
+  event
+}) => {
+  try {
+    console.log(event);
+  } catch (e) {
+    console.error(e);
+  } finally {
+
+  }
+});
