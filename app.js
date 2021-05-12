@@ -33,7 +33,6 @@ const app = new App({
   installationStore: {
     storeInstallation: async (installation) => {
       console.log("Store: " + installation);
-      await ack();
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
         // support for org wide app installation
@@ -47,7 +46,6 @@ const app = new App({
     },
     fetchInstallation: async (installQuery) => {
       console.log("fetch: " + installQuery);
-      await ack();
       // change the line below so it fetches from your database
       if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
         // org wide app installation lookup
@@ -220,6 +218,19 @@ app.event('app_home_opened', async ({
 
 // Listen for an event from the Events API
 app.event('url_verification', async ({
+  event
+}) => {
+  try {
+    console.log(event);
+  } catch (e) {
+    console.error(e);
+  } finally {
+
+  }
+});
+
+// Listen for an event from the Events API
+app.event('oauth_redirect', async ({
   event
 }) => {
   try {
