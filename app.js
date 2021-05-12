@@ -157,14 +157,14 @@ app.message(async ({
             }]
           };
 
-        if("thread_ts" in payload)
-        {
-          sayPost.thread_ts = payload.thread_ts;
+          if ("thread_ts" in payload) {
+            sayPost.thread_ts = payload.thread_ts;
+          }
         }
       }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
   }
 });
 
@@ -213,5 +213,19 @@ app.event('app_home_opened', async ({
     });
   } catch (error) {
     console.error(error);
+  }
+});
+
+
+// Listen for an event from the Events API
+app.event('url_verification', async ({
+  event
+}) => {
+  try {
+    console.log(event);
+  } catch (e) {
+    console.error(e);
+  } finally {
+
   }
 });
