@@ -32,6 +32,7 @@ const app = new App({
   scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
   installationStore: {
     storeInstallation: async (installation) => {
+      await ack();
       console.log(installation);
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
