@@ -25,13 +25,12 @@ pgClient.connect();
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
+  token: process.env.BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: process.env.STATE_SECRET,
   scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
-  socketMode: true,
-  appToken: process.env.APP_TOKEN,
   installationStore: {
     storeInstallation: async (installation) => {
       console.log(installation);
@@ -127,42 +126,41 @@ app.message(async ({
   payload
 }) => {
   try {
-    const userData = await client.users.info({
-      user: message.user
-    });
+    if (message.user !== undefined) {
+      const userData = await client.users.info({
+        user: message.user
+      });
 
-    //  match sure this is a message from a human user
-    if (!userData.is_bot) {
-      const data = await loadData('data.json');
+      //  match sure this is a message from a human user
+      if (!userData.is_bot) {
+        const data = await loadData('data.json');
 
-      let scopeValue = getRndInteger(data.randomValues.max);
+        let scopeValue = getRndInteger(data.randomValues.max);
 
-      const matches = await getRegExMatches(message.text, data.keywords);
+        const matches = await getRegExMatches(message.text, data.keywords);
 
-      //  check of any matches were found in the message
-      if (matches !== null) {
-        scopeValue -= matches.length * data.randomValues.matchIncrease;
-      }
-
-      //console.log("Amount of over scope: " + scopeValue);
-
-      if (scopeValue <= data.randomValues.limit) {
-        let sayPost = {
-          "blocks": [{
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": getQuote(message.user, data.scopebook)
-            }
-          }]
-        };
-
-        if ("thread_ts" in payload) {
-          sayPost.thread_ts = payload.thread_ts;
+        //  check of any matches were found in the message
+        if (matches !== null) {
+          scopeValue -= matches.length * data.randomValues.matchIncrease;
         }
 
-        // say() sends a message to the channel where the event was triggered
-        await say(sayPost);
+        //console.log("Amount of over scope: " + scopeValue);
+
+        if (scopeValue <= data.randomValues.limit) {
+          let sayPost = {
+            "blocks": [{
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": getQuote(message.user, data.scopebook)
+              }
+            }]
+          };
+
+        if("thread_ts" in payload)
+        {
+          sayPost.thread_ts = payload.thread_ts;
+        }
       }
     }
   } catch (error) {
@@ -217,17 +215,3 @@ app.event('app_home_opened', async ({
     console.error(error);
   }
 });
-
-
-//  Postgres Functions
-const createQuery = 'CREATE TABLE installs (id int, install varchar);';
-
-async function sendQuery(query) {
-  try {
-    const res = await pgClient.query(query);
-  } catch (e) {
-    console.log(e.stack);
-  } finally {
-    pgClient.close();
-  }
-}
