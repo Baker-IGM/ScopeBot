@@ -25,7 +25,6 @@ pgClient.connect();
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
-  token: process.env.BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
