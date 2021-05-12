@@ -162,9 +162,9 @@ app.message(async ({
           }
         }
       }
-    } catch (error) {
-      console.error(error);
     }
+  } catch (error) {
+    console.error(error);
   }
 });
 
