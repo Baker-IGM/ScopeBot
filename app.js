@@ -32,7 +32,7 @@ const app = new App({
   scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
   installationStore: {
     storeInstallation: async (installation) => {
-      console.log("Store: " + installation.stringify());
+      console.log("Store: " + JSON.stringify(installation));
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
         // support for org wide app installation
@@ -44,7 +44,7 @@ const app = new App({
       throw new Error('Failed saving installation data to installationStore');
     },
     fetchInstallation: async (installQuery) => {
-      console.log("fetch: " + installQuery.stringify());
+      console.log("fetch: " + JSON.stringify(installQuery));
       // change the line below so it fetches from your database
       if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
         // org wide app installation lookup
