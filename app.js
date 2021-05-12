@@ -12,16 +12,61 @@ const {
 const fs = require("fs");
 const readFile = promisify(fs.readFile);
 
+const {
+  Client
+} = require('pg');
+const pgClient = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+pgClient.connect();
+
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  stateSecret: process.env.STATE_SECRET,
+  scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
+  installationStore: {
+    storeInstallation: async (installation) => {
+      console.log(installation);
+      // change the line below so it saves to your database
+      if (installation.isEnterpriseInstall) {
+        // support for org wide app installation
+
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //pgClient.set(installation.enterprise.id, installation);
+      } else {
+        // single team app installation
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.team.id + ', ' + installation + ')') //pgClient.set(installation.team.id, installation);
+      }
+      throw new Error('Failed saving installation data to installationStore');
+    },
+    fetchInstallation: async (installQuery) => {
+      console.log(installQuery);
+      // change the line below so it fetches from your database
+      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
+        // org wide app installation lookup
+        return await pgClient.get(installQuery.enterpriseId);
+      }
+      if (installQuery.teamId !== undefined) {
+        // single team app installation lookup
+        return await pgClient.get(installQuery.teamId);
+      }
+      throw new Error('Failed fetching installation');
+    },
+  },
 });
 
 //  Start app
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3000);
+
+  //await sendQuery(createQuery);
 
   console.log('⚡️ Bolt app is running!');
 })();
@@ -112,12 +157,9 @@ app.message(async ({
             }]
           };
 
-          if ("thread_ts" in payload) {
-            sayPost.thread_ts = payload.thread_ts;
-          }
-
-          // say() sends a message to the channel where the event was triggered
-          await say(sayPost);
+        if("thread_ts" in payload)
+        {
+          sayPost.thread_ts = payload.thread_ts;
         }
       }
     }
@@ -171,18 +213,5 @@ app.event('app_home_opened', async ({
     });
   } catch (error) {
     console.error(error);
-  }
-});
-
-// Listen for an event from the Events API
-app.event('url_verification', async ({
-  event
-}) => {
-  try {
-    console.log(event);
-  } catch (e) {
-    console.error(e);
-  } finally {
-
   }
 });
