@@ -15,8 +15,7 @@ const readFile = promisify(fs.readFile);
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.BOT_TOKEN,
-  socketMode: true,
-  appToken: process.env.APP_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
 });
 
 //  Start app
@@ -86,7 +85,7 @@ app.message(async ({
       const userData = await client.users.info({
         user: message.user
       });
-      
+
       //  match sure this is a message from a human user
       if (!userData.is_bot) {
         const data = await loadData('data.json');
