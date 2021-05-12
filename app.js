@@ -175,7 +175,7 @@ app.event('app_home_opened', async ({
 });
 
 // Listen for an event from the Events API
-app.event(eventType, async ({
+app.event('url_verification', async ({
   event
 }) => {
   try {
