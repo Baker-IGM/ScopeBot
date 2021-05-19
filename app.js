@@ -234,7 +234,7 @@ app.event('oauth_redirect', async ({
   event
 }) => {
   try {
-    console.log(event);
+    console.log("my oauth: " + event);
   } catch (e) {
     console.error("my oauth error: " + e);
   } finally {
