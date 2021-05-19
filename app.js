@@ -1,5 +1,5 @@
 const {
-  App
+  App, LogLevel
 } = require('@slack/bolt');
 
 if (process.env.NODE_ENV !== 'production') {
@@ -29,6 +29,7 @@ const app = new App({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: process.env.STATE_SECRET,
+  logLevel: LogLevel.DEBUG,
   scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
   installationStore: {
     storeInstallation: async (installation) => {
