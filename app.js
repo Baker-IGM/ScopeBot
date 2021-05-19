@@ -12,16 +12,14 @@ const {
 const fs = require("fs");
 const readFile = promisify(fs.readFile);
 
-const {
-  Client
-} = require('pg');
-const pgClient = new Client({
+const { Pool } = require('pg');
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
-pgClient.connect();
+Pool.connect();
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
@@ -37,10 +35,10 @@ const app = new App({
       // change the line below so it saves to your database
       if (installation.isEnterpriseInstall) {
         // support for org wide app installation
-        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //pgClient.set(installation.enterprise.id, installation);
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //Pool.set(installation.enterprise.id, installation);
       } else {
         // single team app installation
-        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.team.id + ', ' + installation + ')') //pgClient.set(installation.team.id, installation);
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.team.id + ', ' + installation + ')') //Pool.set(installation.team.id, installation);
       }
       throw new Error('Failed saving installation data to installationStore');
     },
@@ -49,11 +47,11 @@ const app = new App({
       // change the line below so it fetches from your database
       if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
         // org wide app installation lookup
-        return await pgClient.get(installQuery.enterpriseId);
+        return await Pool.get(installQuery.enterpriseId);
       }
       if (installQuery.teamId !== undefined) {
         // single team app installation lookup
-        return await pgClient.get(installQuery.teamId);
+        return await Pool.get(installQuery.teamId);
       }
       throw new Error('Failed fetching installation');
     },
@@ -231,7 +229,7 @@ app.event('url_verification', async ({
 
 // Listen for an event from the Events API
 app.event('oauth_redirect', async ({
-  event
+  event, ack
 }) => {
   try {
     console.log("my oauth: " + event);
@@ -241,3 +239,16 @@ app.event('oauth_redirect', async ({
 
   }
 });
+
+//  Postgres Functions
+const createQuery = 'CREATE TABLE installs (id int, install varchar);';
+
+async function sendQuery(query) {
+  try {
+    const res = await Pool.query(query);
+  } catch (e) {
+    console.log(e.stack);
+  } finally {
+    Pool.close();
+  }
+}
