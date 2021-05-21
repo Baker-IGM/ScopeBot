@@ -112,6 +112,8 @@ app.message(async ({
           scopeValue -= matches.length * data.randomValues.matchIncrease;
         }
 
+        console.log("scope value = " + scopeValue);
+
         //console.log("Amount of over scope: " + scopeValue);
 
         if (scopeValue <= data.randomValues.limit) {
@@ -129,6 +131,9 @@ app.message(async ({
             sayPost.thread_ts = payload.thread_ts;
           }
         }
+      }
+      else {
+        console.log("Not a user message");
       }
     }
   } catch (error) {
