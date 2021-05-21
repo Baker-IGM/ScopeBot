@@ -131,6 +131,8 @@ app.message(async ({
           if ("thread_ts" in payload) {
             sayPost.thread_ts = payload.thread_ts;
           }
+
+          await say(sayPost);
         }
       }
       else {
