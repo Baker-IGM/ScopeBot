@@ -117,6 +117,7 @@ app.message(async ({
         //console.log("Amount of over scope: " + scopeValue);
 
         if (scopeValue <= data.randomValues.limit) {
+          console.log("send out of scope message");
           let sayPost = {
             "blocks": [{
               "type": "section",
