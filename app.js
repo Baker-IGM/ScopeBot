@@ -1,5 +1,6 @@
 const {
-  App, LogLevel
+  App,
+  LogLevel
 } = require('@slack/bolt');
 
 if (process.env.NODE_ENV !== 'production') {
@@ -12,50 +13,20 @@ const {
 const fs = require("fs");
 const readFile = promisify(fs.readFile);
 
-const { Pool } = require('pg');
+const {
+  Pool
+} = require('pg');
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
-Pool.connect();
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  clientId: process.env.SLACK_CLIENT_ID,
-  clientSecret: process.env.SLACK_CLIENT_SECRET,
-  stateSecret: process.env.STATE_SECRET,
-  logLevel: LogLevel.DEBUG,
-  scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
-  installationStore: {
-    storeInstallation: async (installation) => {
-      console.log("Store: " + JSON.stringify(installation));
-      // change the line below so it saves to your database
-      if (installation.isEnterpriseInstall) {
-        // support for org wide app installation
-        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //Pool.set(installation.enterprise.id, installation);
-      } else {
-        // single team app installation
-        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.team.id + ', ' + installation + ')') //Pool.set(installation.team.id, installation);
-      }
-      throw new Error('Failed saving installation data to installationStore');
-    },
-    fetchInstallation: async (installQuery) => {
-      console.log("fetch: " + JSON.stringify(installQuery));
-      // change the line below so it fetches from your database
-      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
-        // org wide app installation lookup
-        return await Pool.get(installQuery.enterpriseId);
-      }
-      if (installQuery.teamId !== undefined) {
-        // single team app installation lookup
-        return await Pool.get(installQuery.teamId);
-      }
-      throw new Error('Failed fetching installation');
-    },
-  },
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 
 //  Start app
@@ -229,7 +200,8 @@ app.event('url_verification', async ({
 
 // Listen for an event from the Events API
 app.event('oauth_redirect', async ({
-  event, ack
+  event,
+  ack
 }) => {
   try {
     console.log("my oauth: " + event);
