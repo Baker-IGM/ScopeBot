@@ -1,6 +1,5 @@
 const {
-  App,
-  LogLevel
+  App
 } = require('@slack/bolt');
 
 if (process.env.NODE_ENV !== 'production') {
