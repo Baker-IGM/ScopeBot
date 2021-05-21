@@ -1,5 +1,5 @@
 const {
-  App
+  App, LogLevel
 } = require('@slack/bolt');
 
 if (process.env.NODE_ENV !== 'production') {
@@ -12,17 +12,58 @@ const {
 const fs = require("fs");
 const readFile = promisify(fs.readFile);
 
+const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+Pool.connect();
+
 // Initializes your app with your bot token and signing secret
 const app = new App({
-  token: process.env.BOT_TOKEN,
-  socketMode: true,
-  appToken: process.env.APP_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  stateSecret: process.env.STATE_SECRET,
+  logLevel: LogLevel.DEBUG,
+  scopes: ['channels:history', 'groups:history', 'app_mentions:read', 'chat:write', 'users:read'],
+  installationStore: {
+    storeInstallation: async (installation) => {
+      console.log("Store: " + JSON.stringify(installation));
+      // change the line below so it saves to your database
+      if (installation.isEnterpriseInstall) {
+        // support for org wide app installation
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.enterprise.id + ', ' + installation + ')') //Pool.set(installation.enterprise.id, installation);
+      } else {
+        // single team app installation
+        return await sendQuery('INSERT INTO installs (id, install) VALUES (' + installation.team.id + ', ' + installation + ')') //Pool.set(installation.team.id, installation);
+      }
+      throw new Error('Failed saving installation data to installationStore');
+    },
+    fetchInstallation: async (installQuery) => {
+      console.log("fetch: " + JSON.stringify(installQuery));
+      // change the line below so it fetches from your database
+      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
+        // org wide app installation lookup
+        return await Pool.get(installQuery.enterpriseId);
+      }
+      if (installQuery.teamId !== undefined) {
+        // single team app installation lookup
+        return await Pool.get(installQuery.teamId);
+      }
+      throw new Error('Failed fetching installation');
+    },
+  },
 });
 
 //  Start app
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3000);
+
+  //await sendQuery(createQuery);
 
   console.log('⚡️ Bolt app is running!');
 })();
@@ -86,7 +127,7 @@ app.message(async ({
       const userData = await client.users.info({
         user: message.user
       });
-      
+
       //  match sure this is a message from a human user
       if (!userData.is_bot) {
         const data = await loadData('data.json');
@@ -116,9 +157,6 @@ app.message(async ({
           if ("thread_ts" in payload) {
             sayPost.thread_ts = payload.thread_ts;
           }
-
-          // say() sends a message to the channel where the event was triggered
-          await say(sayPost);
         }
       }
     }
@@ -174,3 +212,43 @@ app.event('app_home_opened', async ({
     console.error(error);
   }
 });
+
+
+// Listen for an event from the Events API
+app.event('url_verification', async ({
+  event
+}) => {
+  try {
+    console.log(event);
+  } catch (e) {
+    console.error(e);
+  } finally {
+
+  }
+});
+
+// Listen for an event from the Events API
+app.event('oauth_redirect', async ({
+  event, ack
+}) => {
+  try {
+    console.log("my oauth: " + event);
+  } catch (e) {
+    console.error("my oauth error: " + e);
+  } finally {
+
+  }
+});
+
+//  Postgres Functions
+const createQuery = 'CREATE TABLE installs (id int, install varchar);';
+
+async function sendQuery(query) {
+  try {
+    const res = await Pool.query(query);
+  } catch (e) {
+    console.log(e.stack);
+  } finally {
+    Pool.close();
+  }
+}

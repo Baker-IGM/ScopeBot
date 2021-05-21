@@ -59,7 +59,7 @@
   "randomValues": {
     "max": 100,
     "matchIncrease": 25,
-    "limit": 25
+    "limit": 10
   },
   "cooldowns": {},
   "scopecounter": {}
