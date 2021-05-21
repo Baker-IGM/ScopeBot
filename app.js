@@ -112,12 +112,9 @@ app.message(async ({
           scopeValue -= matches.length * data.randomValues.matchIncrease;
         }
 
-        console.log("scope value = " + scopeValue);
-
         //console.log("Amount of over scope: " + scopeValue);
 
         if (scopeValue <= data.randomValues.limit) {
-          console.log("send out of scope message");
           let sayPost = {
             "blocks": [{
               "type": "section",
@@ -134,9 +131,6 @@ app.message(async ({
 
           await say(sayPost);
         }
-      }
-      else {
-        console.log("Not a user message");
       }
     }
   } catch (error) {
